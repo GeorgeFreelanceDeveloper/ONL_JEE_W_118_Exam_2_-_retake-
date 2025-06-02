@@ -12,28 +12,27 @@ import java.io.PrintWriter;
 
 @WebServlet("/someCookie")
 public class SomeCookieServlet extends HttpServlet {
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-        final String login = request.getParameter("login");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve the 'login' parameter from the request
+        String login = request.getParameter("login");
+        response.setContentType("text/html");
+        PrintWriter responseWriter = response.getWriter();
 
         if (login != null && !login.isEmpty()) {
-            Cookie loginCookie = new Cookie("login", login);
-            loginCookie.setMaxAge(60 * 60);
+            // Create a cookie with the login value
+            Cookie loginCookie = new Cookie("cookieLogin", login);
+            loginCookie.setMaxAge(60 * 60); // 1 hour
             response.addCookie(loginCookie);
-        }
+            request.getSession().setAttribute("login", login);
 
-        response.setContentType("text/html; utf-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("<html><body>");
-        if (login != null && !login.isEmpty()) {
-            out.println("<p>Cookie 'cookieLogin' set with value: " + login + "</p>");
+            responseWriter.println("<html><body>");
+            responseWriter.println("<h2>Login cookie created successfully.</h2>");
+            responseWriter.println("<p>Login: " + login + "</p>");
+            responseWriter.println("</body></html>");
         } else {
-            out.println("<p>No login parameter provided.</p>");
+            responseWriter.println("<html><body>");
+            responseWriter.println("<h2>No login value provided.</h2>");
+            responseWriter.println("</body></html>");
         }
-        out.println("</body></html>");
     }
 }
