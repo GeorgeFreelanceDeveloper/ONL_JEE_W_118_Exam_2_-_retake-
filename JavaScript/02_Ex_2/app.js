@@ -36,19 +36,20 @@ const linkElems = document.querySelectorAll('a');
 function getAddressesOfElements(elements) {
     const hrefsArray = [];
     elements.forEach(element => {
-        hrefsArray.push(element.href);
+        if (element.href.includes('www.')) {
+            hrefsArray.push(element.href);
+        }
     });
-    return hrefsArray;
+    console.log(hrefsArray);
 }
-console.log(getAddressesOfElements(linkElems));
+getAddressesOfElements(linkElems);
 
 // 5. searching for child tags:
 const superFormElems = document.getElementById('super_form');
 function getChildrenOfElement(element) {
-    const childrenArray = [];
-    element.childNodes.forEach(child => {
-        childrenArray.push(child.tagName);
-    });
-    return childrenArray;
+    const childrenArray = superFormElems.children;
+    for (let i = 0; i < childrenArray.length; i++) {
+        console.log(childrenArray[i].tagName);
+    }
 }
-console.log(getChildrenOfElement(superFormElems));
+getChildrenOfElement(superFormElems);
